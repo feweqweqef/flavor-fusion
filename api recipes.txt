@@ -1,1 +1,0 @@
-https://8fefavtlo4.execute-api.us-east-1.amazonaws.com/prod/recipes
