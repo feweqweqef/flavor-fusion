@@ -1,0 +1,53 @@
+import json
+import boto3
+
+def lambda_handler(event, context):
+    search_query = event.get('queryStringParameters', {}).get('q', '')  # Get the search query from the event data
+    dynamodb = boto3.resource('dynamodb')
+    table = dynamodb.Table('recipes')  # 
+    try:
+        if search_query:
+            # Perform a DynamoDB scan and filter the results based on the search query
+            response = table.scan(
+                FilterExpression="contains(category, :q) OR contains(recipe_name, :q)",
+                ExpressionAttributeValues={
+                    ":q": search_query
+                }
+            )
+            items = response['Items']
+        else:
+            # If no search query provided, retrieve all recipes
+            response = table.scan()  # Perform a DynamoDB scan to retrieve all items
+            items = response['Items']
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',  # Change "*" to your frontend domain for production use
+            },
+            'body': json.dumps({'error': 'Failed to retrieve recipes from DynamoDB.'}),
+        }
+
+    # Extract necessary fields from items
+    recipes = []
+    for item in items:
+        recipe = {
+            'recipe_id': item['recipe_id'],
+            'category': item.get('category', ''),  # Use 'get' method to handle missing attribute
+            'ingredients': item.get('ingredients', ''),  # Use 'get' method to handle missing attribute
+            'recipe_image': item.get('recipe_image', ''), 
+            'recipe_info': item.get('recipe_info', ''),  # Use 'get' method to handle missing attribute
+            'recipe_name': item.get('recipe_name', ''),  # Use 'get' method to handle missing attribute
+            'time_taken': item.get('time_taken', '')  # Use 'get' method to handle missing attribute
+        }
+        recipes.append(recipe)
+
+    return {
+        'statusCode': 200,
+        'headers': {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',  # Change "*" to your frontend domain for production use
+        },
+        'body': json.dumps(recipes),
+    }

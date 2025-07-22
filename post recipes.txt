@@ -1,0 +1,43 @@
+import json
+import boto3
+from uuid import uuid4
+
+def lambda_handler(event, context):
+    dynamodb = boto3.resource('dynamodb')
+    table = dynamodb.Table('recipes')  
+
+    try:
+        data = json.loads(event['body'])  # Parse the request body JSON
+        recipe_id = str(uuid4())  # Generate a unique ID for the recipe
+
+        # Prepare the item to be put into DynamoDB
+        item = {
+            'recipe_id': recipe_id,
+            'category': data.get('category', ''),
+            'ingredients': data.get('ingredients', ''),
+            'recipe_image': data.get('recipe_image', ''),
+            'recipe_info': data.get('recipe_info', ''),
+            'recipe_name': data.get('recipe_name', ''),
+            'time_taken': data.get('time_taken', '')
+        }
+
+        # Put the item into DynamoDB
+        table.put_item(Item=item)
+
+        return {
+            'statusCode': 201,  # 201 Created
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',  # Change "*" 
+            },
+            'body': json.dumps({'message': 'Recipe added successfully.', 'recipe_id': recipe_id}),
+        }
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',  # Change "*" 
+            },
+            'body': json.dumps({'error': 'Failed to add the recipe.'}),
+        }

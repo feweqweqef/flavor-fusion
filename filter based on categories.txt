@@ -1,0 +1,48 @@
+import json
+import boto3
+
+def lambda_handler(event, context):
+    category = event.get('queryStringParameters', {}).get('category')
+
+    dynamodb = boto3.resource('dynamodb')
+    table = dynamodb.Table('recipes')  
+    try:
+        response = table.scan()  # Perform a DynamoDB scan to retrieve all items
+        items = response['Items']
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',  # Change "*" 
+            },
+            'body': json.dumps({'error': 'Failed to retrieve recipes from DynamoDB.'}),
+        }
+
+    # Extract necessary fields from items
+    recipes = []
+    for item in items:
+        recipe = {
+            'recipe_id': item['recipe_id'],
+            'category': item.get('category', ''),  # Use 'get' method to handle missing attribute
+            'ingredients': item.get('ingredients', ''),  # Use 'get' method to handle missing attribute
+            'recipe_image': item.get('recipe_image', ''), 
+            'recipe_info': item.get('recipe_info', ''),# Use 'get' method to handle missing attribute
+            'recipe_name': item.get('recipe_name', ''),  # Use 'get' method to handle missing attribute
+            'time_taken': item.get('time_taken', '')  # Use 'get' method to handle missing attribute
+        }
+        recipes.append(recipe)
+
+    # Filter recipes based on category, if provided
+    if category:
+        filtered_recipes = [recipe for recipe in recipes if recipe['category'] == category]
+        recipes = filtered_recipes
+
+    return {
+        'statusCode': 200,
+        'headers': {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',  # Change "*" 
+        },
+        'body': json.dumps(recipes),
+    }

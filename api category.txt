@@ -1,0 +1,11 @@
+https://d9g89h4xd8.execute-api.us-east-1.amazonaws.com/prod/category?category=Beef
+
+https://d9g89h4xd8.execute-api.us-east-1.amazonaws.com/prod/category?category=Desserts
+
+https://d9g89h4xd8.execute-api.us-east-1.amazonaws.com/prod/category?category=Salad
+
+https://d9g89h4xd8.execute-api.us-east-1.amazonaws.com/prod/category?category=Rice
+
+https://d9g89h4xd8.execute-api.us-east-1.amazonaws.com/prod/category?category=Pasta
+
+https://d9g89h4xd8.execute-api.us-east-1.amazonaws.com/prod/category?category=Healthy

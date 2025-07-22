@@ -1,0 +1,41 @@
+import json
+import boto3
+
+def lambda_handler(event, context):
+    dynamodb = boto3.resource('dynamodb')
+    table = dynamodb.Table('Culture') 
+    try:
+        response = table.scan()  # Perform a DynamoDB scan to retrieve all items
+        items = response['Items']
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',  
+            },
+            'body': json.dumps({'error': 'Failed to retrieve culture items from DynamoDB.'}),
+        }
+
+    # Extract necessary fields from items
+    culture_items = []
+    for item in items:
+        culture = {
+            'culture_id': item['culture_id'],
+            'culture_image': item.get('culture_image', ''),
+            'culture_image_2': item.get('culture_image_2', ''),
+            'culture_info': item.get('culture_info', ''),
+            'name': item.get('name', ''),
+            'sub_title': item.get('sub_title', ''),
+            'title': item.get('title', '')
+        }
+        culture_items.append(culture)
+
+    return {
+        'statusCode': 200,
+        'headers': {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',  # Change "*" 
+        },
+        'body': json.dumps(culture_items),
+    }
