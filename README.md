@@ -5,12 +5,12 @@ My first cloud computing project - A responsive recipe website built and hosted 
 
 ## Project Overview
 This web app is built using a full serverless stack on AWS, including:
-- **Amazon DynamoDB** for data storage
-- **AWS Lambda** for backend logic
-- **Amazon API Gateway** for REST APIs
-- **Amazon Cognito** for user login and authentication
-- **Amazon Lex** for chatbot interaction
-- **Amazon S3** for static website hosting
+- Amazon DynamoDB for data storage
+- AWS Lambda for backend logic
+- Amazon API Gateway for REST APIs
+- Amazon Cognito for user login and authentication
+- Amazon Lex for chatbot interaction
+- Amazon S3 for static website hosting
 
 ## Key Features
 - Exploring Recipes
