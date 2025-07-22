@@ -1,1 +1,0 @@
-https://l761ahbwne.execute-api.us-east-1.amazonaws.com/yes/culture
