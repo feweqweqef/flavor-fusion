@@ -3,15 +3,6 @@ My first cloud computing project - A responsive recipe website built and hosted 
 
 *Flavour Fusion* is a dynamic recipe recommendation website designed to make discovering, exploring, and sharing recipes more enjoyable and personalized. I built it with a fully serverless architecture using AWS services. The project combines intuitive UI, cloud scalability, and smart user interactions to deliver a seamless cooking experience.
 
-## Project Overview
-This web app is built using a full serverless stack on AWS, including:
-- Amazon DynamoDB for data storage
-- AWS Lambda for backend logic
-- Amazon API Gateway for REST APIs
-- Amazon Cognito for user login and authentication
-- Amazon Lex for chatbot interaction
-- Amazon S3 for static website hosting
-
 ## Key Features
 - Exploring Recipes
 - Smart Filtering & Search
